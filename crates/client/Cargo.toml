@@ -5,7 +5,3 @@ edition = "2024"
 
 [dependencies]
 common = {path = "../common"}
-
-[workspace]
-resolver = "3"
-members = ["client"]
