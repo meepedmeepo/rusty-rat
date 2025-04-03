@@ -1,6 +1,8 @@
 use log::debug;
 use thiserror::Error;
 pub mod networking;
+pub mod schemas;
+
 
 pub fn add(left: u64, right: u64) -> u64 {
     left + right
