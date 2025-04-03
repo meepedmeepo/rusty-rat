@@ -1,8 +1,5 @@
 mod identity_keys;
-mod encryption;
-
 pub use identity_keys::*;
-pub use encryption::*;
 
 use blake2::{
     Blake2b, VarBlake2b,

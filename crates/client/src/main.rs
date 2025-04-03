@@ -3,8 +3,7 @@
 
 
 fn main() {
-    println!("Hello, world!");
-    client::
+    client::create_client_identity();
 }
 
 
