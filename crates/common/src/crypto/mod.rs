@@ -1,4 +1,6 @@
+pub mod encryption;
 mod identity_keys;
+
 pub use identity_keys::*;
 
 use blake2::{
@@ -48,7 +50,6 @@ impl Keypair {
     }
 }
 
-
 pub fn gen_diffie_hellman_keys() {
     let mut random_generator = OsRng {};
 
@@ -58,4 +59,3 @@ pub fn gen_diffie_hellman_keys() {
     let priv_key = StaticSecret::random_from_rng(random_generator);
     let pub_key = PublicKey::from(&priv_key);
 }
-
