@@ -1,7 +1,8 @@
 pub mod encryption;
 mod identity_keys;
-
+mod prekey;
 pub use identity_keys::*;
+pub use prekey::*;
 
 use blake2::{
     Blake2b, VarBlake2b,
@@ -9,7 +10,7 @@ use blake2::{
 };
 use rand::{RngCore, rngs::OsRng};
 use x25519_dalek::{PublicKey, StaticSecret};
-const XCHACHA20_POLY1305_KEY_SIZE: usize = 32;
+pub const XCHACHA20_POLY1305_KEY_SIZE: usize = 32;
 pub const XCHACHA20_POLY1305_NONCE_SIZE: usize = 24;
 
 ///Private and public keypair to be used for diffie-hellman
@@ -33,7 +34,7 @@ impl Keypair {
     }
 
     ///Creates shared secret that to be used as encryption key for message
-    pub fn generate_secret(
+    pub fn generate_shared_secret(
         &self,
         recieved_public_key: PublicKey,
         nonce: &[u8; XCHACHA20_POLY1305_NONCE_SIZE],
@@ -51,11 +52,11 @@ impl Keypair {
 }
 
 pub fn gen_diffie_hellman_keys() {
-    let mut random_generator = OsRng {};
+    // let mut random_generator = OsRng {};
 
-    let mut nonce = [0u8; XCHACHA20_POLY1305_NONCE_SIZE];
-    random_generator.fill_bytes(&mut nonce);
+    // let mut nonce = [0u8; XCHACHA20_POLY1305_NONCE_SIZE];
+    // random_generator.fill_bytes(&mut nonce);
 
-    let priv_key = StaticSecret::random_from_rng(random_generator);
-    let pub_key = PublicKey::from(&priv_key);
+    // let priv_key = StaticSecret::random_from_rng(random_generator);
+    // let pub_key = PublicKey::from(&priv_key);
 }

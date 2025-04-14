@@ -4,13 +4,16 @@ use x25519_dalek::PublicKey;
 
 use super::{XCHACHA20_POLY1305_KEY_SIZE, XCHACHA20_POLY1305_NONCE_SIZE};
 
-#[derive(Debug, PartialEq, Error)]
+#[derive(Debug, Error)]
 pub enum CryptographyError {
     #[error("Encryption failed to complete: {}", .0)]
     EncryptionFailed(Error),
 
     #[error("Decryption failed to complete: {}", .0)]
     DecryptionFailed(Error),
+
+    #[error("Verifying message signature failed to complete: {}", .0)]
+    SignatureInvalid(ed25519_dalek::SignatureError),
 }
 
 pub fn encrypt_XCha20ChaPoly1305(
@@ -40,5 +43,3 @@ pub fn decrypt_XCha20ChaPoly1305(
 
     Ok(plain_text)
 }
-
-

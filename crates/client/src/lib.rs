@@ -10,7 +10,7 @@ pub fn init() {
 pub fn create_client_identity() {
     use base64::engine::general_purpose::STANDARD;
 
-    let (priv_key, pub_key) = common::crypto::create_identity();
+    let (priv_key, pub_key) = common::cryptographic_functions::create_identity();
 
     let priv_str = STANDARD.encode(priv_key.to_bytes());
     let pub_str = STANDARD.encode(pub_key.as_bytes());
