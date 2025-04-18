@@ -466,6 +466,7 @@ dependencies = [
  "ed25519-dalek",
  "log",
  "rand 0.8.5",
+ "serde",
  "thiserror",
  "uuid",
  "x25519-dalek",

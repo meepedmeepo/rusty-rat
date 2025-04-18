@@ -1,8 +1,8 @@
 mod agents;
-
+mod jobs;
 pub use agents::*;
-
 use ed25519_dalek::{SIGNATURE_LENGTH, Signature, VerifyingKey};
+pub use jobs::*;
 
 use crate::cryptographic_functions::{
     XCHACHA20_POLY1305_KEY_SIZE, XCHACHA20_POLY1305_NONCE_SIZE, encryption::CryptographyError,

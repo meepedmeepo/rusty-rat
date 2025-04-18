@@ -12,6 +12,7 @@ use rand::{RngCore, rngs::OsRng};
 use x25519_dalek::{PublicKey, StaticSecret};
 pub const XCHACHA20_POLY1305_KEY_SIZE: usize = 32;
 pub const XCHACHA20_POLY1305_NONCE_SIZE: usize = 24;
+pub const X25519_KEY_SIZE: usize = 32;
 
 ///Private and public keypair to be used for diffie-hellman
 struct Keypair {

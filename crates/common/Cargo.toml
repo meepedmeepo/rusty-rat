@@ -10,6 +10,7 @@ crypto = { version = "0.5.1", features = ["elliptic-curve"] }
 ed25519-dalek = { version = "2.1.1", features = ["rand_core"] }
 log = "0.4.27"
 rand = "<0.9.0"
+serde = { version = "1.0.219", features = ["derive"] }
 thiserror = "2.0.12"
 uuid = { version = "1.16.0", features = ["serde"] }
 x25519-dalek = { version = "2.0.1", features = ["static_secrets"] }
