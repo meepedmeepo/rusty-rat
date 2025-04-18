@@ -1,12 +1,14 @@
 mod agents;
 mod jobs;
-pub use agents::*;
-use ed25519_dalek::{SIGNATURE_LENGTH, Signature, VerifyingKey};
-pub use jobs::*;
+mod response;
 
 use crate::cryptographic_functions::{
     XCHACHA20_POLY1305_KEY_SIZE, XCHACHA20_POLY1305_NONCE_SIZE, encryption::CryptographyError,
 };
+pub use agents::*;
+use ed25519_dalek::{SIGNATURE_LENGTH, Signature, VerifyingKey};
+pub use jobs::*;
+pub use response::*;
 
 ///This is a schema of what any message that has been encrypted will contain (only messages after public keys have been transferred)
 pub struct EncryptedMessageSchema {
