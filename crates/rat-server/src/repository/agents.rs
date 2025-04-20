@@ -2,6 +2,7 @@ use anyhow::Error;
 use common::schemas::{Agent, RegisterAgent};
 use serde::Serialize;
 use sqlx::{Pool, Postgres, query_as};
+use tracing::error;
 use uuid::Uuid;
 
 use super::Repository;
@@ -41,5 +42,26 @@ impl Repository {
         let res = query_as::<_, Agent>(QUERY_STR).fetch_all(&db).await?;
 
         Ok(res)
+    }
+
+    ///Updates an agent record's last seen at timestamp whenever an agent makes contact with the server
+    pub async fn update_agent(&self, db: &Pool<Postgres>, agent: &Agent) -> Result<(), Error> {
+        const QUERY: &str = "UPDATE agents
+            SET last_seen_at = $1
+            WHERE id = $2";
+
+        match sqlx::query(QUERY)
+            .bind(agent.last_seen_at)
+            .bind(agent.id)
+            .execute(db)
+            .await
+        {
+            Err(err) => {
+                error!("update_agent: updating agent {}", &err);
+                Err(err.into())
+            }
+
+            Ok(_) => Ok(()),
+        }
     }
 }

@@ -1,4 +1,7 @@
+mod agents;
+mod entities;
 mod postgres_db;
+pub use agents::*;
 pub use postgres_db::*;
 use sqlx::{Pool, Postgres};
 
