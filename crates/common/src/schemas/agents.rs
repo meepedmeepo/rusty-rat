@@ -1,10 +1,11 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use sqlx::FromRow;
 use uuid::Uuid;
 
 use crate::cryptographic_functions::X25519_KEY_SIZE;
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, FromRow)]
 pub struct Agent {
     pub id: Uuid,
     pub created_at: DateTime<Utc>,

@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use sqlx::FromRow;
 use uuid::Uuid;
 
 use crate::cryptographic_functions::{X25519_KEY_SIZE, XCHACHA20_POLY1305_NONCE_SIZE};
@@ -20,7 +21,7 @@ pub struct JobPayload {
     pub result_ephemeral_public_key: [u8; X25519_KEY_SIZE],
 }
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, FromRow)]
 pub struct Job {
     pub id: Uuid,
     pub agent_id: Uuid,

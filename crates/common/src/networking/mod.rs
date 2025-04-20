@@ -1,7 +1,6 @@
 mod ipconnection;
-
-
 pub use ipconnection::*;
+
 use thiserror::Error;
 
 #[derive(Error, Debug, PartialEq)]

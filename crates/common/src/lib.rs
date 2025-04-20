@@ -1,6 +1,7 @@
 use log::debug;
 use thiserror::Error;
 pub mod cryptographic_functions;
+pub mod jobs;
 pub mod networking;
 pub mod schemas;
 
