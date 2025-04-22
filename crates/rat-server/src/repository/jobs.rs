@@ -1,8 +1,13 @@
 use anyhow::{Error, anyhow};
-use common::{jobs::JobError, schemas::Job};
+use common::{
+    jobs::JobError,
+    schemas::{DatabaseError, Job},
+};
 use sqlx::{Pool, Postgres};
 use tracing::error;
 use uuid::Uuid;
+
+use crate::services;
 
 use super::Repository;
 
@@ -43,10 +48,14 @@ impl Repository {
 
     ///Returns job object if a job with a match uuid is found, else returns an anyhow error
     /// Will log an error if it was a connection error that causes lack of job to be found
-    pub async fn find_job_by_id(&self, db: &Pool<Postgres>, job_id: Uuid) -> Result<Job, Error> {
+    pub async fn find_job_by_id(
+        &self,
+        db: &Pool<Postgres>,
+        job_id: Uuid,
+    ) -> Result<services::Job, Error> {
         const QUERY: &str = "SELECT * FROM jobs WHERE id = $1";
 
-        match sqlx::query_as::<_, Job>(QUERY)
+        match sqlx::query_as::<_, services::Job>(QUERY)
             .bind(job_id)
             .fetch_optional(db)
             .await
@@ -56,9 +65,9 @@ impl Repository {
                 Err(err.into())
             }
 
-            Ok(None) => Err(anyhow!("Job not found")),
+            Ok(None) => Err(DatabaseError::NotFound.into()),
 
-            Ok(Some(res)) => Ok(res),
+            Ok(Some(res)) => Ok(res.into()),
         }
     }
 
@@ -67,12 +76,12 @@ impl Repository {
         &self,
         db: &Pool<Postgres>,
         agent_id: Uuid,
-    ) -> Result<Job, Error> {
+    ) -> Result<services::Job, Error> {
         const QUERY: &str = "SELECT * FROM jobs
             WHERE agent_id = $1 AND encrypted_result IS NULL
             LIMIT 1";
 
-        match sqlx::query_as::<_, Job>(QUERY)
+        match sqlx::query_as::<_, services::Job>(QUERY)
             .bind(agent_id)
             .fetch_optional(db)
             .await
@@ -82,7 +91,7 @@ impl Repository {
                 Err(err.into())
             }
 
-            Ok(None) => Err(anyhow!("Job not found")),
+            Ok(None) => Err(DatabaseError::NotFound.into()),
             Ok(Some(res)) => Ok(res),
         }
     }

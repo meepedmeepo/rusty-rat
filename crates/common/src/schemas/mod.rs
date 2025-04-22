@@ -1,4 +1,5 @@
 mod agents;
+mod errors;
 mod jobs;
 mod response;
 
@@ -7,6 +8,7 @@ use crate::cryptographic_functions::{
 };
 pub use agents::*;
 use ed25519_dalek::{SIGNATURE_LENGTH, Signature, VerifyingKey};
+pub use errors::*;
 pub use jobs::*;
 pub use response::*;
 
