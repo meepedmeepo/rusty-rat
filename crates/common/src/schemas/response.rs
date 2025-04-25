@@ -23,6 +23,13 @@ impl<T: Serialize> Response<T> {
             error: Some(err.into()),
         }
     }
+
+    pub fn from_anyhow_err(err: anyhow::Error) -> Response<T> {
+        Response {
+            data: None,
+            error: Some(Error::from_error(err)),
+        }
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]
