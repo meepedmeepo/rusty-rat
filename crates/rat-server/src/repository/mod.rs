@@ -7,7 +7,7 @@ use anyhow::Error;
 use common::schemas::Agent;
 use sqlx::{Executor, Pool, Postgres, query, query_as};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Repository {}
 
 impl Repository {}

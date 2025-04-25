@@ -6,8 +6,6 @@ use common::{
 };
 use uuid::Uuid;
 
-use crate::configuration::APPSTATE;
-
 use super::{Job, Service};
 
 impl Service {
@@ -85,10 +83,10 @@ impl Service {
 
         let sig = ed25519_dalek::Signature::try_from(&input.signature[0..64])?;
 
-        match APPSTATE
+        match self
+            .state
             .lock()
             .unwrap()
-            .config
             .client_identity_public_key
             .verify_strict(&job_buffer, &sig)
         {

@@ -31,3 +31,12 @@ pub struct Error {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extensions: Option<HashMap<String, String>>,
 }
+
+impl Error {
+    pub fn from_error(err: anyhow::Error) -> Self {
+        Self {
+            message: err.to_string(),
+            extensions: None,
+        }
+    }
+}

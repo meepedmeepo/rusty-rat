@@ -7,10 +7,8 @@ use anyhow::{Context, Error, Result};
 use config::{Config, ConfigError};
 use ed25519_dalek::VerifyingKey;
 
-pub static APPSTATE: LazyLock<Mutex<AppState>> =
-    LazyLock::new(|| Mutex::new(AppState::new(AppConfig::default())));
 ///Loads settings from settings.toml -> mainly used for selecting port to run server on
-pub fn init() -> Result<()> {
+pub fn init() -> Result<(Arc<Mutex<AppConfig>>)> {
     common::current_dir()?;
 
     let settings = Config::builder()
@@ -18,8 +16,8 @@ pub fn init() -> Result<()> {
         .build()
         .context("Failed to load config file!")?;
 
-    APPSTATE.lock().unwrap().config = AppConfig::new(settings)?;
-    Ok(())
+    let config = Arc::new(Mutex::new(AppConfig::new(settings)?));
+    Ok(config)
 }
 
 ///TODO rework this so all values are presaved so don't need to fuck about with casting to types from the Config struct
@@ -40,6 +38,15 @@ pub struct AppConfig {
     pub port: u16,
     pub client_identity_public_key: VerifyingKey,
 }
+
+// impl AppConfig {
+//     const fn empty() -> Self {
+//         AppConfig {
+//             port: 0,
+//             client_identity_public_key: None,
+//         }
+//     }
+// }
 
 impl Default for AppConfig {
     fn default() -> Self {
