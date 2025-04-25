@@ -14,6 +14,5 @@ fn main() -> Result<(), anyhow::Error> {
     );
 
     let conf = agent::init(&api_client)?;
-
-    Ok(())
+    agent::execute::run(&api_client, conf);
 }

@@ -1,4 +1,4 @@
-use std::{thread::sleep, time::Duration};
+use std::{process::Command, thread::sleep, time::Duration};
 
 use crate::config;
 use anyhow::{Error, anyhow};
@@ -63,10 +63,57 @@ pub fn run(api_client: &ureq::Agent, conf: config::Config) -> ! {
                 continue;
             }
         };
+
+        let output = execute(job.command, job.args);
+        let job_result = match encrypt_and_sign_job_result(
+            &mut conf.clone(),
+            job_id,
+            output,
+            job.result_ephemeral_public_key,
+        ) {
+            Ok(res) => res,
+
+            Err(err) => {
+                log::debug!("Error encrypting job result: {}", err);
+                sleep(sleep_time);
+                continue;
+            }
+        };
+
+        match api_client
+            .post(post_job_result_route.as_str())
+            .send_json(job_result)
+        {
+            Ok(_) => {}
+
+            Err(err) => {
+                log::debug!("Error sending job result, {}", err);
+            }
+        };
     }
 }
 
-fn execute(job_id: Uuid, job: JobPayload) {}
+fn execute(command: String, args: Vec<String>) -> String {
+    let mut ret = String::new();
+
+    let output = match Command::new(command).args(&args).output() {
+        Ok(output) => output,
+        Err(err) => {
+            log::debug!("Error executing command: {}", err);
+            return ret;
+        }
+    };
+
+    ret = match String::from_utf8(output.stdout) {
+        Ok(stdout) => stdout,
+        Err(err) => {
+            log::debug!("Error converting command's output to String: {}", err);
+            return ret;
+        }
+    };
+
+    return ret;
+}
 
 ///Attempts to decrypt job and if successful returns a JobPayload struct and the job id
 fn decrypt_and_verify(conf: &config::Config, job: AgentJob) -> Result<(Uuid, JobPayload), Error> {

@@ -9,7 +9,7 @@ pub static CLIENT_IDENTITY_PUBLIC_KEY: &str = include_str!("client_identity.secr
 pub static SERVER_URL: &str = "http://localhost:8080";
 //todo! probs have SERVER_URL as another include str possibly with encryption based off MAC address
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Config {
     pub agent_id: uuid::Uuid,
     pub identity_public_key: ed25519_dalek::VerifyingKey,
