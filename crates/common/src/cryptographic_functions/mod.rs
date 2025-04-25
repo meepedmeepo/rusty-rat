@@ -52,6 +52,16 @@ impl Keypair {
     }
 }
 
+pub fn derive_key_from_shared_secret(
+    dh_secret: &[u8; 32],
+    nonce: &[u8; XCHACHA20_POLY1305_NONCE_SIZE],
+) -> Box<[u8]> {
+    let mut kdf = blake2::VarBlake2b::new_keyed(dh_secret, XCHACHA20_POLY1305_KEY_SIZE);
+    VarBlake2b::update(&mut kdf, nonce);
+
+    kdf.finalize_boxed()
+}
+
 pub fn gen_diffie_hellman_keys() {
     // let mut random_generator = OsRng {};
 

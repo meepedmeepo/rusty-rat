@@ -33,12 +33,16 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "base64 0.22.1",
+ "chacha20poly1305",
  "common",
  "ed25519-dalek",
+ "log",
  "serde",
+ "serde_json",
  "ureq",
  "uuid",
  "x25519-dalek",
+ "zeroize",
 ]
 
 [[package]]

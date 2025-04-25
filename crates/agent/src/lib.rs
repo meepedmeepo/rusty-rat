@@ -9,6 +9,7 @@ use core::error;
 
 //use anyhow::Error;
 pub mod config;
+mod execute;
 
 pub fn init(api_client: &ureq::Agent) -> Result<config::Config, Error> {
     let conf = register_client(api_client)?;
