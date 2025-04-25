@@ -6,4 +6,12 @@ pub enum JobError {
     IdentityAlreadyTaken,
     #[error("Identity Keys oncelocks have already been initialised")]
     IdentityAlreadyInitialised,
+    #[error("Failed to send Ureq Request, Error: {}", .0)]
+    UreqSendFailure(String),
+    #[error("Failed to read Ureq Response, Error: {}", .0)]
+    UreqResponseReadFailure(String),
+    #[error("Api Error: {}", .0)]
+    ApiErr(String),
+    #[error("Client Identity public key error: {}", .0)]
+    ClientIdentityKeyDecodeFailure(String),
 }

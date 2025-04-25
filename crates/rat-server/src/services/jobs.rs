@@ -6,6 +6,8 @@ use common::{
 };
 use uuid::Uuid;
 
+use crate::configuration::APPSTATE;
+
 use super::{Job, Service};
 
 impl Service {
@@ -72,7 +74,9 @@ impl Service {
         self.repo.update_job(&self.db, &job.into()).await
     }
 
-    pub async fn create_job(&self, input: &CreateJob) -> Result<Job, Error> {
+    ///Validates the signature of the CreateJob against the client's long term public identity key, and if it is valid then
+    /// adds a row in the database for a new job.
+    pub async fn create_job(&self, input: &CreateJob) -> Result<common::schemas::Job, Error> {
         let mut job_buffer = input.id.as_bytes().to_vec();
         job_buffer.append(&mut input.agent_id.as_bytes().to_vec());
         job_buffer.append(&mut input.encrypted_job.clone());
@@ -81,6 +85,33 @@ impl Service {
 
         let sig = ed25519_dalek::Signature::try_from(&input.signature[0..64])?;
 
-        todo!()
+        match APPSTATE
+            .lock()
+            .unwrap()
+            .config
+            .client_identity_public_key
+            .verify_strict(&job_buffer, &sig)
+        {
+            Ok(_) => {}
+
+            Err(err) => return Err(CryptographyError::SignatureInvalid(err.into()).into()),
+        }
+
+        let new_job = common::schemas::Job {
+            id: input.id,
+            agent_id: input.agent_id,
+            encrypted_job: input.encrypted_job.clone(),
+            ephemeral_public_key: input.ephemeral_public_key,
+            nonce: input.nonce,
+            signature: input.signature.clone(),
+            encrypted_result: None,
+            result_ephemeral_public_key: None,
+            result_nonce: None,
+            result_signature: None,
+        };
+
+        self.repo.create_job(&self.db, &new_job).await?;
+
+        Ok(new_job)
     }
 }

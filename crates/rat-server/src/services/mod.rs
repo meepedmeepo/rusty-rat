@@ -11,6 +11,8 @@ use sqlx::{Pool, Postgres};
 
 use crate::repository::Repository;
 
+/// TODO! Consider adding max job size and max job result size and validation for them in an attempt to stop
+/// a badly created job or result causing havoc on the server
 #[derive(Debug)]
 pub struct Service {
     repo: Repository,
