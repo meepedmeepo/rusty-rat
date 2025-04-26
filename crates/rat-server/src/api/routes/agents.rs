@@ -12,11 +12,11 @@ use axum::{
 use common::schemas::{Agent, AgentRegistered, AgentsList, Error, RegisterAgent, Response};
 use uuid::Uuid;
 
-pub fn create_agent_routes(state: services::Service) {
-    let agent_routes: Router<services::Service> = Router::new()
+pub fn create_agent_routes(state: services::Service) -> Router<services::Service> {
+    Router::new()
         .route("/", post(post_agent_handler).get(get_agents))
         .route("/single", get(get_agent))
-        .with_state(state);
+        .with_state(state)
 }
 
 /// ## Handler: POST /api/agents/
