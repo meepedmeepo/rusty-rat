@@ -2,7 +2,7 @@ use clap::Parser;
 use client::Cli;
 
 fn main() {
-    //client::create_client_identity();
+    client::create_client_identity();
 
     let args = Cli::parse();
 
