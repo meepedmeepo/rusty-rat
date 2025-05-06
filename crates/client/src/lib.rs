@@ -1,3 +1,6 @@
+mod parser;
+pub use parser::*;
+
 use std::fs;
 
 use base64::Engine;

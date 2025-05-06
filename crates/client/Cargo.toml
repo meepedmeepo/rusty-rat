@@ -5,4 +5,5 @@ edition = "2024"
 
 [dependencies]
 base64 = "0.22.1"
+clap = { version = "4.5.37", features = ["derive"] }
 common = {path = "../common"}
