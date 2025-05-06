@@ -5,7 +5,7 @@ use crate::configuration::{AppConfig, AppState};
 use anyhow::anyhow;
 use axum::{
     Json, Router,
-    extract::State,
+    extract::{Path, State},
     http::StatusCode,
     routing::{get, post},
 };
@@ -15,7 +15,7 @@ use uuid::Uuid;
 pub fn create_agent_routes(state: services::Service) -> Router<services::Service> {
     Router::new()
         .route("/", post(post_agent_handler).get(get_agents))
-        .route("/single", get(get_agent))
+        .route("/{agent_uuid}", get(get_agent))
         .with_state(state)
 }
 
@@ -58,13 +58,13 @@ async fn get_agents(
     (StatusCode::OK, axum::Json(Response::ok(res)))
 }
 
-/// ## Handler: GET /api/agents/single
+/// ## Handler: GET /api/agents/{agent_uuid}
 /// attempts to get and return an agent with a given UUID
 async fn get_agent(
     State(state): State<services::Service>,
-    Json(agent_id): Json<Uuid>,
+    Path(agent_uuid): Path<Uuid>,
 ) -> (StatusCode, Json<Response<Agent>>) {
-    let agent = state.find_agent(agent_id).await;
+    let agent = state.find_agent(agent_uuid).await;
 
     match agent {
         Err(err) => (

@@ -526,6 +526,8 @@ dependencies = [
  "base64 0.22.1",
  "clap",
  "common",
+ "ureq",
+ "uuid",
 ]
 
 [[package]]

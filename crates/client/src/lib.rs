@@ -1,13 +1,24 @@
+mod api_calls;
+mod config;
 mod parser;
-pub use parser::*;
 
-use std::fs;
+pub use api_calls::*;
+pub use config::*;
+pub use parser::*;
+use ureq::config::Config;
+
+use std::{fs, time::Duration};
 
 use base64::Engine;
 pub use common;
 
-pub fn init() {
-    todo!();
+pub fn init() -> ureq::Agent {
+    ureq::Agent::new_with_config(
+        Config::builder()
+            .https_only(true)
+            .timeout_global(Some(Duration::from_secs(10)))
+            .build(),
+    )
 }
 
 pub fn create_client_identity() {
