@@ -18,4 +18,14 @@ pub enum JobError {
     AgentNotFound(String),
     #[error("Agents list error: Agent list empty")]
     NoRegisteredAgents,
+    #[error("Agent prekey signature invalid error: {}",.0)]
+    PrekeySignatureInvalid(String),
+    #[error("Agent public identity key invalid error: {}",.0)]
+    AgentPublicIdentityKeyInvalid(String),
+    #[error("Agents prekey signature doesn't match")]
+    SignaturesDontMatch,
+    #[error("Job payload serialization error: {}",.0)]
+    PayloadSerializationFailed(String),
+    #[error("Job encryption error: {}",.0)]
+    JobEncryptionFailed(String),
 }
