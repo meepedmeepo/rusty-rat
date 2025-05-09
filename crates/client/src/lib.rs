@@ -7,7 +7,7 @@ use chacha20poly1305::{KeyInit, XChaCha20Poly1305, aead::Aead};
 use common::{
     cryptographic_functions::{XCHACHA20_POLY1305_NONCE_SIZE, derive_key_from_shared_secret},
     jobs::JobError,
-    schemas::{CreateJob, Job, JobPayload},
+    schemas::{CreateJob, CreateJobPayload, JobPayload},
 };
 pub use config::*;
 use ed25519_dalek::{Signature, SigningKey, VerifyingKey, ed25519::signature::SignerMut};
@@ -51,6 +51,7 @@ pub fn create_client_identity() {
     .unwrap();
 }
 
+///encrypts a payload required for creating a new job for an agent
 pub fn encrypt_job(
     api_client: &Agent,
     agent_uuid: Uuid,

@@ -21,6 +21,12 @@ pub struct JobPayload {
     pub result_ephemeral_public_key: [u8; X25519_KEY_SIZE],
 }
 
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct CreateJobPayload {
+    pub command: String,
+    pub args: Vec<String>,
+}
+
 #[derive(Debug, Clone, Deserialize, Serialize, FromRow)]
 pub struct Job {
     pub id: Uuid,

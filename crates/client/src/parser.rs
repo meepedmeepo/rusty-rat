@@ -11,6 +11,7 @@ pub struct Cli {
 pub enum Commands {
     ///Queries server api to get information on agents
     Agents(AgentsArgs),
+    Jobs(JobArgs),
 }
 
 #[derive(Debug, clap::Args, Clone)]
@@ -21,7 +22,13 @@ pub struct JobArgs {
 
 #[allow(non_camel_case_types)]
 #[derive(clap::Subcommand, Debug, Clone)]
-pub enum JobCommands {}
+pub enum JobCommands {
+    create {
+        id: String,
+        command: String,
+        args: String,
+    },
+}
 
 #[derive(Debug, clap::Args, Clone)]
 pub struct AgentsArgs {
