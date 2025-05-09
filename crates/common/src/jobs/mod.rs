@@ -14,4 +14,8 @@ pub enum JobError {
     ApiErr(String),
     #[error("Client Identity public key error: {}", .0)]
     ClientIdentityKeyDecodeFailure(String),
+    #[error("Agent not found error: {}",.0)]
+    AgentNotFound(String),
+    #[error("Agents list error: Agent list empty")]
+    NoRegisteredAgents,
 }

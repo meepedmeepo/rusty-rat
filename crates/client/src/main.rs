@@ -19,7 +19,7 @@ fn main() {
                         panic!("Error: couldn't parse uuid: {:?}", err);
                     }
                     Ok(uuid) => {
-                        todo!()
+                        //client::fetch_agent_single(uuid, &api_client).
                     }
                 },
 
