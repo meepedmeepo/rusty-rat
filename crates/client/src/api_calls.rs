@@ -78,3 +78,21 @@ pub fn post_new_job(api_client: &ureq::Agent, job: CreateJob) -> Result<Job, Job
         Some(job) => Ok(job),
     }
 }
+
+pub fn get_job_result(api_client: &ureq::Agent, job_id: Uuid) -> Result<Job, JobError> {
+    let api_get_job_result_route = format!("{}/api/jobs/result/{}", super::SERVER_URL, job_id);
+
+    let res: Response<Option<Job>> = api_client
+        .get(api_get_job_result_route)
+        .call()
+        .map_err(|err| JobError::UreqSendFailure(err.to_string()))?
+        .into_body()
+        .read_json()
+        .map_err(|err| JobError::UreqResponseReadFailure(err.to_string()))?;
+
+    if res.data.is_none() {
+        Err(JobError::JobIncomplete)
+    } else {
+        Ok(res.data.unwrap().unwrap())
+    }
+}

@@ -1,3 +1,5 @@
+use std::{thread::sleep, time::Duration};
+
 use clap::Parser;
 use client::Cli;
 use common::{
@@ -24,7 +26,8 @@ fn main() {
                         panic!("Error: couldn't parse uuid: {:?}", err);
                     }
                     Ok(uuid) => {
-                        //client::fetch_agent_single(uuid, &api_client).
+                        //todo!: remove the unwrap and handle errors
+                        let agent = client::fetch_agent_single(uuid, &api_client).unwrap();
                     }
                 },
 
@@ -65,7 +68,22 @@ fn main() {
                             .expect("Job encryption failed");
 
                         //
-                        client::post_new_job(&api_client, job_payload).unwrap();
+                        let job_id = client::post_new_job(&api_client, job_payload).unwrap().id;
+                        let sleep_time = Duration::from_secs(5);
+                        //todo!: implement looping until job output can be read -> need to implement job result fetching first
+                        loop {
+                            match client::get_job_result(&api_client, job_id) {
+                                Err(err) => {
+                                    println!("Couldn't get job result! : {}", err);
+                                    sleep(sleep_time);
+                                }
+
+                                Ok(res) => {
+                                    //todo! output result of job
+                                    return;
+                                }
+                            }
+                        }
                     }
                 },
             }

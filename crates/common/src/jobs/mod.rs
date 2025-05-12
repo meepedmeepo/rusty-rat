@@ -28,4 +28,6 @@ pub enum JobError {
     PayloadSerializationFailed(String),
     #[error("Job encryption error: {}",.0)]
     JobEncryptionFailed(String),
+    #[error("Job Not Completed")]
+    JobIncomplete,
 }
